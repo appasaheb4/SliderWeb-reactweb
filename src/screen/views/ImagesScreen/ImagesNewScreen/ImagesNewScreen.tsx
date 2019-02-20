@@ -18,7 +18,7 @@ import {
 import { Loader } from "react-overlay-loader";
 import Dialog from "react-bootstrap-dialog";
 
-//Custome Files
+//Custome File
 import { colors, apiary } from "../../../../api/constants/Constants";
 var utils = require("../../../../api/constants/Utils");
 
