@@ -32,7 +32,9 @@ var apiary = {
   insertModel: domain + "api/insertModel",
   imageUpload: domain + "api/imageUpload",
   delete_ModelImage: domain + "api/delete_ModelImage",
-  update_ModelImage: domain + "api/update_ModelImage"
+  imageUploadSessionAdd: domain + "api/imageUploadSessionAdd",
+  update_ModelImage: domain + "api/update_ModelImage",
+  imageEditUpload: domain + "api/imageEditUpload"
 };
 
 export { errorMessage, apiary, colors };
