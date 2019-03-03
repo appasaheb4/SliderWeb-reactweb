@@ -146,7 +146,7 @@ export default class ImagesViewScreen extends Component<any, any> {
   }
 
   priceFormatter(cell, row) {
-    let imagePage = "http://mobile.cmshuawei.com/" + row.imagePath;
+    let imagePage = apiary.domain + row.imagePath;
     return (
       <img
         onClick={() => {
