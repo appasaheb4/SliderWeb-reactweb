@@ -22,10 +22,8 @@ var colors = {
 };
 
 //Rest Full Api
-//const domain = "http://mobile.cmshuawei.com/";
-const domain = "http://test.cmshuawei.com/";
+const domain = "http://mobile.cmshuawei.com/";
 var apiary = {
-  domain: domain,
   getModels: domain + "api/getModels",
   loginUser: domain + "api/loginUser",
   getAllImages: domain + "api/getAllImages",
@@ -34,7 +32,9 @@ var apiary = {
   insertModel: domain + "api/insertModel",
   imageUpload: domain + "api/imageUpload",
   delete_ModelImage: domain + "api/delete_ModelImage",
-  update_ModelImage: domain + "api/update_ModelImage"
+  imageUploadSessionAdd: domain + "api/imageUploadSessionAdd",
+  update_ModelImage: domain + "api/update_ModelImage",
+  imageEditUpload: domain + "api/imageEditUpload"
 };
 
 export { errorMessage, apiary, colors };
