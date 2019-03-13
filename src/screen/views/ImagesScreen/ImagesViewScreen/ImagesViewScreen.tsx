@@ -178,7 +178,7 @@ export default class ImagesViewScreen extends Component<any, any> {
   }
 
   priceFormatter(cell, row) {
-    let imagePage = "http://mobile.cmshuawei.com/" + row.imagePath;
+    let imagePage = apiary.domain + row.imagePath;
     return (
       <img
         onClick={() => {
@@ -211,8 +211,6 @@ export default class ImagesViewScreen extends Component<any, any> {
     formData.append("modelId", this.state.arr_SelectedImageRow.modelId);
     formData.append("modelName", this.state.arr_SelectedImageRow.modelName);
     formData.append("imageName", this.state.imageName);
-
-    console.log(this.state.file);
 
     var body = {
       myImage: this.state.file,

@@ -22,8 +22,10 @@ var colors = {
 };
 
 //Rest Full Api
-const domain = "http://mobile.cmshuawei.com/";
+//const domain = "http://mobile.cmshuawei.com/";
+const domain = "http://test.cmshuawei.com/";
 var apiary = {
+  domain: domain,
   getModels: domain + "api/getModels",
   loginUser: domain + "api/loginUser",
   getAllImages: domain + "api/getAllImages",

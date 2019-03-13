@@ -18,7 +18,7 @@ import {
 import { Loader } from "react-overlay-loader";
 import Dialog from "react-bootstrap-dialog";
 
-//Custome Files
+//Custome File
 import { colors, apiary } from "../../../../api/constants/Constants";
 var utils = require("../../../../api/constants/Utils");
 
@@ -73,14 +73,20 @@ export default class ImagesNewScreen extends Component<any, any> {
     formData.append("modelId", optionValue.id);
     formData.append("modelName", optionValue.modelName);
     formData.append("imageName", this.state.imageName);
-    // var body = {
-    //   myImage: this.state.file,
-    //   date: utils.getUnixTimeDate(new Date()),
-    //   title: e.target.title.value,
-    //   modelId: optionValue.id,
-    //   modelName: optionValue.modelName,
-    //   imageName: this.state.imageName
-    // };
+    var body = {
+      myImage: this.state.file,
+      date: utils.getUnixTimeDate(new Date()),
+      modelName: optionValue.modelName,
+      imageName: this.state.imageName
+    };
+    axios
+      .post(apiary.imageUploadSessionAdd, body)
+      .then(response => {
+        let data = response.data;
+        console.log({ data });
+      })
+      .catch(error => {});
+
     const config = {
       headers: {
         "content-type": "multipart/form-data"
@@ -91,7 +97,7 @@ export default class ImagesNewScreen extends Component<any, any> {
       .then(response => {
         alert(response.data);
       })
-      .catch(error => {});
+      .catch(error1 => {});
   }
   render() {
     return (
