@@ -68,6 +68,7 @@
     "react-spinners": "^0.5.1",
     "react-test-renderer": "^16.7.0",
     "react-toastify": "^4.5.2",
+    "react-toasts": "^3.0.0",
     "reactstrap": "^7.0.2",
     "simple-line-icons": "^2.4.1",
     "store": "^2.0.12",

@@ -25,7 +25,10 @@ import cellEditFactory from "react-bootstrap-table2-editor";
 import overlayFactory from "react-bootstrap-table2-overlay";
 import Dialog from "react-bootstrap-dialog";
 import Modal from "react-modal";
+import { ToastsContainer, ToastsStore } from "react-toasts";
 
+//button icons
+import Fab from "@material-ui/core/Fab";
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
 var utils = require("../../../../api/constants/Utils");
@@ -91,21 +94,7 @@ export default class ImagesViewScreen extends Component<any, any> {
   //TODO: func connection_UpdateData
   connection_UpdateData(oldValue, newValue, item) {
     if (oldValue != newValue) {
-      this.dialog.show({
-        title: "Confirmation",
-        body: "Are you sure update data?",
-        actions: [
-          Dialog.CancelAction(),
-          Dialog.OKAction(() => {
-            this.updateDate(item);
-          })
-        ],
-        bsSize: "small",
-        onHide: dialog => {
-          dialog.hide();
-          console.log("closed by clicking background.");
-        }
-      });
+      this.updateDate(item);
     }
   }
 
@@ -123,20 +112,8 @@ export default class ImagesViewScreen extends Component<any, any> {
       .then(response => {
         let data = response.data.data;
         if (data == "Data update sccurss.") {
-          this.dialog.show({
-            title: "Success",
-            body: data,
-            actions: [
-              Dialog.OKAction(() => {
-                window.location.reload();
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
+          ToastsStore.success(data);
+          this.componentDidMount();
         }
       })
       .catch(function(error) {
@@ -156,20 +133,8 @@ export default class ImagesViewScreen extends Component<any, any> {
       .then(response => {
         let data = response.data.data;
         if (data == "Data deleted sccurss.") {
-          this.dialog.show({
-            title: "Success",
-            body: data,
-            actions: [
-              Dialog.OKAction(() => {
-                window.location.reload();
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
+          ToastsStore.success(data);
+          this.componentDidMount();
         }
       })
       .catch(function(error) {
@@ -204,6 +169,9 @@ export default class ImagesViewScreen extends Component<any, any> {
 
   onFormSubmit(e: any) {
     e.preventDefault();
+    this.setState({
+      flag_ModelVisible: false
+    });
     const formData = new FormData();
     formData.append("myImage", this.state.file);
     formData.append("date", utils.getUnixTimeDate(new Date()));
@@ -235,7 +203,8 @@ export default class ImagesViewScreen extends Component<any, any> {
     axios
       .post(apiary.imageEditUpload, formData, config)
       .then(response => {
-        alert(response.data);
+        ToastsStore.success(response.data);
+        this.componentDidMount();
       })
       .catch(error1 => {});
   }
@@ -261,36 +230,44 @@ export default class ImagesViewScreen extends Component<any, any> {
         text: "Image",
         formatter: this.priceFormatter.bind(this),
         editable: false
+      },
+      {
+        dataField: "opration",
+        text: "Delete",
+        style: {
+          width: 10
+        },
+        editable: false,
+        formatter: (cellContent, row) => (
+          <div>
+            <Fab
+              color="secondary"
+              aria-label="delete"
+              onClick={() => {
+                this.dialog.show({
+                  title: "Confirmation",
+                  body: "Are you sure delete data?",
+                  actions: [
+                    Dialog.CancelAction(),
+                    Dialog.OKAction(() => {
+                      this.deleteData(row);
+                    })
+                  ],
+                  bsSize: "small",
+                  onHide: dialog => {
+                    dialog.hide();
+                    console.log("closed by clicking background.");
+                  }
+                });
+              }}
+              style={styles.buttonIcon}
+            >
+              <FaRegTrashAlt />
+            </Fab>
+          </div>
+        )
       }
     ];
-    const selectRow = {
-      mode: "radio",
-      clickToEdit: true,
-      bgColor: "#00BFFF",
-      selectionHeaderRenderer: () => "Delete",
-      style: { backgroundColor: "#c8e6c9" },
-
-      onSelect: (row, isSelect, rowIndex, e) => {
-        if (isSelect) {
-          this.dialog.show({
-            title: "Confirmation",
-            body: "Are you sure delete data?",
-            actions: [
-              Dialog.CancelAction(),
-              Dialog.OKAction(() => {
-                this.deleteData(row);
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
-        }
-      }
-    };
-
     return (
       <div className="app flex-row">
         <Container>
@@ -300,7 +277,6 @@ export default class ImagesViewScreen extends Component<any, any> {
             columns={columns}
             hover
             pagination={paginationFactory()}
-            selectRow={selectRow}
             cellEdit={cellEditFactory({
               mode: "click",
               blurToSave: true,
@@ -369,8 +345,17 @@ export default class ImagesViewScreen extends Component<any, any> {
               </form>
             </div>
           </Modal>
+          <ToastsContainer store={ToastsStore} />
         </Container>
       </div>
     );
   }
 }
+const styles = {
+  buttonIcon: {
+    height: 30,
+    width: 30,
+    borderRadius: 5,
+    marginRight: 10
+  }
+};

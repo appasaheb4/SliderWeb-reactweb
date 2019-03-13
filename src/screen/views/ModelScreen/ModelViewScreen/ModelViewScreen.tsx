@@ -10,10 +10,9 @@ import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import cellEditFactory from "react-bootstrap-table2-editor";
 import overlayFactory from "react-bootstrap-table2-overlay";
 import Dialog from "react-bootstrap-dialog";
-import { createMuiTheme } from "@material-ui/core/styles";
+import { ToastsContainer, ToastsStore } from "react-toasts";
 
 //button icons
-import { withStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 
 //Custome Files
@@ -51,22 +50,7 @@ export default class ModelViewScreen extends Component<any, any> {
   //TODO: func connection_UpdateData
   connection_UpdateData(oldValue, newValue, item) {
     if (oldValue != newValue) {
-      console.log({ oldValue, newValue, item });
-      this.dialog.show({
-        title: "Confirmation",
-        body: "Are you sure update data?",
-        actions: [
-          Dialog.CancelAction(),
-          Dialog.OKAction(() => {
-            this.updateDate(item);
-          })
-        ],
-        bsSize: "small",
-        onHide: dialog => {
-          dialog.hide();
-          console.log("closed by clicking background.");
-        }
-      });
+      this.updateDate(item);
     }
   }
 
@@ -84,20 +68,8 @@ export default class ModelViewScreen extends Component<any, any> {
       .then(response => {
         let data = response.data.data;
         if (data == "Data update sccurss.") {
-          this.dialog.show({
-            title: "Success",
-            body: data,
-            actions: [
-              Dialog.OKAction(() => {
-                window.location.reload();
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
+          ToastsStore.success(data);
+          this.componentDidMount();
         }
       })
       .catch(function(error) {
@@ -117,20 +89,8 @@ export default class ModelViewScreen extends Component<any, any> {
       .then(response => {
         let data = response.data.data;
         if (data == "Data deleted sccurss.") {
-          this.dialog.show({
-            title: "Success",
-            body: data,
-            actions: [
-              Dialog.OKAction(() => {
-                window.location.reload();
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
+          ToastsStore.success(data);
+          this.componentDidMount();
         }
       })
       .catch(function(error) {
@@ -143,7 +103,9 @@ export default class ModelViewScreen extends Component<any, any> {
     const columns = [
       {
         dataField: "id",
-        text: "Id"
+        text: "Id",
+        hidden: true,
+        editable: false
       },
       {
         dataField: "modelName",
@@ -155,25 +117,13 @@ export default class ModelViewScreen extends Component<any, any> {
       },
       {
         dataField: "opration",
-        text: "Opration",
+        text: "Delete",
+        style: {
+          width: 10
+        },
+        editable: false,
         formatter: (cellContent, row) => (
           <div>
-            <Fab
-              color="secondary"
-              aria-label="Edit"
-              onClick={() => console.log({ cellContent, row })}
-              style={styles.buttonIcon}
-            >
-              <FaRegEdit />
-            </Fab>
-            <Fab
-              color="primary"
-              aria-label="editConfirm"
-              onClick={() => console.log({ cellContent, row })}
-              style={styles.buttonIcon}
-            >
-              <FaCheckSquare />
-            </Fab>
             <Fab
               color="secondary"
               aria-label="delete"
@@ -198,45 +148,24 @@ export default class ModelViewScreen extends Component<any, any> {
             >
               <FaRegTrashAlt />
             </Fab>
-            <Fab
-              color="primary"
-              aria-label="deleteConfirm"
-              onClick={() => console.log({ cellContent, row })}
-              style={styles.buttonIcon}
-            >
-              <FaCheckSquare />
-            </Fab>
           </div>
         )
       }
     ];
 
-    const selectRow = {
-      mode: "radio",
-      clickToEdit: true,
-      bgColor: "#00BFFF",
-      selectionHeaderRenderer: () => "Delete",
-      style: { backgroundColor: "#c8e6c9" },
-
-      onSelect: (row, isSelect, rowIndex, e) => {
-        if (isSelect) {
-        }
-      }
-    };
-
     return (
       <div className="app flex-row">
         <Container>
           <BootstrapTable
+            ref="table"
             keyField="id"
             data={this.state.data}
             columns={columns}
             hover
             loading={loading}
             pagination={paginationFactory()}
-            selectRow={selectRow}
             cellEdit={cellEditFactory({
-              mode: "dbclick",
+              mode: "click",
               blurToSave: true,
               afterSaveCell: (oldValue, newValue, row, column) => {
                 this.connection_UpdateData(oldValue, newValue, row);
@@ -248,6 +177,7 @@ export default class ModelViewScreen extends Component<any, any> {
               this.dialog = component;
             }}
           />
+          <ToastsContainer store={ToastsStore} />
         </Container>
       </div>
     );
