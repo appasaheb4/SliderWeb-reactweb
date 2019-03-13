@@ -168,7 +168,7 @@ export default class ModelViewScreen extends Component<any, any> {
             </Fab>
             <Fab
               color="primary"
-              aria-label="Edit"
+              aria-label="editConfirm"
               onClick={() => console.log({ cellContent, row })}
               style={styles.buttonIcon}
             >
@@ -176,15 +176,31 @@ export default class ModelViewScreen extends Component<any, any> {
             </Fab>
             <Fab
               color="secondary"
-              aria-label="Edit"
-              onClick={() => console.log({ cellContent, row })}
+              aria-label="delete"
+              onClick={() => {
+                this.dialog.show({
+                  title: "Confirmation",
+                  body: "Are you sure delete data?",
+                  actions: [
+                    Dialog.CancelAction(),
+                    Dialog.OKAction(() => {
+                      this.deleteData(row);
+                    })
+                  ],
+                  bsSize: "small",
+                  onHide: dialog => {
+                    dialog.hide();
+                    console.log("closed by clicking background.");
+                  }
+                });
+              }}
               style={styles.buttonIcon}
             >
               <FaRegTrashAlt />
             </Fab>
             <Fab
               color="primary"
-              aria-label="Edit"
+              aria-label="deleteConfirm"
               onClick={() => console.log({ cellContent, row })}
               style={styles.buttonIcon}
             >
@@ -204,21 +220,6 @@ export default class ModelViewScreen extends Component<any, any> {
 
       onSelect: (row, isSelect, rowIndex, e) => {
         if (isSelect) {
-          this.dialog.show({
-            title: "Confirmation",
-            body: "Are you sure delete data?",
-            actions: [
-              Dialog.CancelAction(),
-              Dialog.OKAction(() => {
-                this.deleteData(row);
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
         }
       }
     };

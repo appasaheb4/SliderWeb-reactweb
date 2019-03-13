@@ -60,7 +60,6 @@ export default class LoginScreen extends Component<any, any> {
       .then(response => {
         let data = response.data;
         let res = data.data;
-        console.log({ res });
         if (data.statusCode == 200) {
           localStorage.setItem("sessionloginDetails", JSON.stringify(res));
           this.props.history.push({

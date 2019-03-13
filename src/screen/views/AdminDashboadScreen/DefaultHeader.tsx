@@ -26,7 +26,23 @@ const propTypes = {
 
 const defaultProps = {};
 
-class DefaultHeader extends Component {
+export default class DefaultHeader extends Component<any, any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      arr_UserDetails: []
+    };
+  }
+
+  componentWillMount() {
+    let loginSeesionData = JSON.parse(
+      localStorage.getItem("sessionloginDetails")
+    );
+    this.setState({
+      arr_UserDetails: loginSeesionData[0]
+    });
+  }
+
   render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
@@ -62,7 +78,10 @@ class DefaultHeader extends Component {
           </NavItem>{" "}
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <h5> admin@ gmail.com </h5>{" "}
+              <h5 style={{ marginRight: 10 }}>
+                {" "}
+                {this.state.arr_UserDetails.email}{" "}
+              </h5>{" "}
             </DropdownToggle>{" "}
             <DropdownMenu
               right
@@ -92,5 +111,3 @@ class DefaultHeader extends Component {
 
 DefaultHeader.propTypes = propTypes;
 DefaultHeader.defaultProps = defaultProps;
-
-export default DefaultHeader;

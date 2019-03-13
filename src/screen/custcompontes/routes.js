@@ -1,5 +1,5 @@
 import React from "react";
-import AdminDashboadScreen from "../views/AdminDashboadScreen";
+//import AdminDashboadScreen from "../views/AdminDashboadScreen";
 const Dashboard = React.lazy(() => import("../views/Dashboard"));
 const ImagesNewScreen = React.lazy(() =>
   import("../views/ImagesScreen/ImagesNewScreen/ImagesNewScreen")

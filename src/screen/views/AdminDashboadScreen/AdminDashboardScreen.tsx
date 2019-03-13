@@ -33,18 +33,13 @@ export default class AdminDashboardScreen extends Component {
     let loginSeesionData = JSON.parse(
       localStorage.getItem("sessionloginDetails")
     );
-    console.log({ loginSeesionData });
     if (loginSeesionData == null) {
       this.props.history.push("/login");
     } else {
-      let data = this.props.location.state;
-      console.log({ data });
     }
-
-    console.log({ loginSeesionData });
   }
 
-  signOut(e) {
+  signOut(e: any) {
     e.preventDefault();
     localStorage.removeItem("sessionloginDetails");
     this.props.history.push("/login");
