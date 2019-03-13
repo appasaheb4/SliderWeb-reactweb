@@ -15,7 +15,6 @@ import {
   InputGroupText,
   Row
 } from "reactstrap";
-import moment from "moment";
 import { Loader } from "react-overlay-loader";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DatePicker from "react-datepicker";

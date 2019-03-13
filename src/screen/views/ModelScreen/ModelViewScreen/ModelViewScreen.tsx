@@ -3,13 +3,18 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { Container, Row } from "reactstrap";
 import { Loader } from "react-overlay-loader";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaRegEdit, FaRegTrashAlt, FaCheckSquare } from "react-icons/fa";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import cellEditFactory from "react-bootstrap-table2-editor";
 import overlayFactory from "react-bootstrap-table2-overlay";
 import Dialog from "react-bootstrap-dialog";
+import { createMuiTheme } from "@material-ui/core/styles";
+
+//button icons
+import { withStyles } from "@material-ui/core/styles";
+import Fab from "@material-ui/core/Fab";
 
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
@@ -147,6 +152,46 @@ export default class ModelViewScreen extends Component<any, any> {
       {
         dataField: "price",
         text: "Price"
+      },
+      {
+        dataField: "opration",
+        text: "Opration",
+        formatter: (cellContent, row) => (
+          <div>
+            <Fab
+              color="secondary"
+              aria-label="Edit"
+              onClick={() => console.log({ cellContent, row })}
+              style={styles.buttonIcon}
+            >
+              <FaRegEdit />
+            </Fab>
+            <Fab
+              color="primary"
+              aria-label="Edit"
+              onClick={() => console.log({ cellContent, row })}
+              style={styles.buttonIcon}
+            >
+              <FaCheckSquare />
+            </Fab>
+            <Fab
+              color="secondary"
+              aria-label="Edit"
+              onClick={() => console.log({ cellContent, row })}
+              style={styles.buttonIcon}
+            >
+              <FaRegTrashAlt />
+            </Fab>
+            <Fab
+              color="primary"
+              aria-label="Edit"
+              onClick={() => console.log({ cellContent, row })}
+              style={styles.buttonIcon}
+            >
+              <FaCheckSquare />
+            </Fab>
+          </div>
+        )
       }
     ];
 
@@ -207,3 +252,11 @@ export default class ModelViewScreen extends Component<any, any> {
     );
   }
 }
+const styles = {
+  buttonIcon: {
+    height: 30,
+    width: 30,
+    borderRadius: 5,
+    marginRight: 10
+  }
+};

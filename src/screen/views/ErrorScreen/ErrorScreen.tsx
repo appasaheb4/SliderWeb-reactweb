@@ -1,14 +1,9 @@
 import React, { Component } from "react";
 
-
-
 export default class ErrorScreen extends Component<any, any> {
   constructor(props: any) {
     super(props);
-
   }
-
-  
 
   render() {
     return (
