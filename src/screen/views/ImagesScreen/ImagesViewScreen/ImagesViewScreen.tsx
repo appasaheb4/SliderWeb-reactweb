@@ -26,11 +26,11 @@ import overlayFactory from "react-bootstrap-table2-overlay";
 import Dialog from "react-bootstrap-dialog";
 import Modal from "react-modal";
 import { ToastsContainer, ToastsStore } from "react-toasts";
-
 //button icons
 import Fab from "@material-ui/core/Fab";
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
+var io = require("socket.io-client/dist/socket.io");
 var utils = require("../../../../api/constants/Utils");
 
 const customStyles = {
@@ -111,10 +111,10 @@ export default class ImagesViewScreen extends Component<any, any> {
     })
       .then(response => {
         let data = response.data.data;
-        if (data == "Data update sccurss.") {
-          ToastsStore.success(data);
-          this.componentDidMount();
-        }
+        ToastsStore.success(data);
+        this.componentDidMount();
+        var socket = io();
+        socket.emit("update");
       })
       .catch(function(error) {
         console.log(error);
@@ -132,10 +132,10 @@ export default class ImagesViewScreen extends Component<any, any> {
     })
       .then(response => {
         let data = response.data.data;
-        if (data == "Data deleted sccurss.") {
-          ToastsStore.success(data);
-          this.componentDidMount();
-        }
+        ToastsStore.success(data);
+        this.componentDidMount();
+        var socket = io();
+        socket.emit("update");
       })
       .catch(function(error) {
         console.log(error);
@@ -205,6 +205,8 @@ export default class ImagesViewScreen extends Component<any, any> {
       .then(response => {
         ToastsStore.success(response.data);
         this.componentDidMount();
+        var socket = io();
+        socket.emit("update");
       })
       .catch(error1 => {});
   }

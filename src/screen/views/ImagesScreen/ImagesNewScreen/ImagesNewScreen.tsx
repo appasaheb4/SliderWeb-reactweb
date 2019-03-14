@@ -17,9 +17,10 @@ import {
 } from "reactstrap";
 import { Loader } from "react-overlay-loader";
 import Dialog from "react-bootstrap-dialog";
-
+import { ToastsContainer, ToastsStore } from "react-toasts";
 //Custome File
 import { colors, apiary } from "../../../../api/constants/Constants";
+var io = require("socket.io-client/dist/socket.io");
 var utils = require("../../../../api/constants/Utils");
 
 export default class ImagesNewScreen extends Component<any, any> {
@@ -95,10 +96,13 @@ export default class ImagesNewScreen extends Component<any, any> {
     axios
       .post(apiary.imageUpload, formData, config)
       .then(response => {
-        alert(response.data);
+        ToastsStore.success(response.data);
+        var socket = io();
+        socket.emit("update");
       })
       .catch(error1 => {});
   }
+
   render() {
     return (
       <div className="app flex-row">
@@ -183,6 +187,7 @@ export default class ImagesNewScreen extends Component<any, any> {
               this.dialog = component;
             }}
           />
+          <ToastsContainer store={ToastsStore} />
         </Container>
       </div>
     );

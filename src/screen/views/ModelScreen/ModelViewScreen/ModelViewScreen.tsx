@@ -11,12 +11,12 @@ import cellEditFactory from "react-bootstrap-table2-editor";
 import overlayFactory from "react-bootstrap-table2-overlay";
 import Dialog from "react-bootstrap-dialog";
 import { ToastsContainer, ToastsStore } from "react-toasts";
-
 //button icons
 import Fab from "@material-ui/core/Fab";
 
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
+var io = require("socket.io-client/dist/socket.io");
 
 export default class ModelViewScreen extends Component<any, any> {
   constructor(props: any) {
@@ -67,10 +67,11 @@ export default class ModelViewScreen extends Component<any, any> {
     })
       .then(response => {
         let data = response.data.data;
-        if (data == "Data update sccurss.") {
-          ToastsStore.success(data);
-          this.componentDidMount();
-        }
+        console.log({ data });
+        ToastsStore.success(data);
+        this.componentDidMount();
+        var socket = io();
+        socket.emit("update");
       })
       .catch(function(error) {
         console.log(error);
@@ -88,10 +89,10 @@ export default class ModelViewScreen extends Component<any, any> {
     })
       .then(response => {
         let data = response.data.data;
-        if (data == "Data deleted sccurss.") {
-          ToastsStore.success(data);
-          this.componentDidMount();
-        }
+        ToastsStore.success(data);
+        this.componentDidMount();
+        var socket = io();
+        socket.emit("update");
       })
       .catch(function(error) {
         console.log(error);

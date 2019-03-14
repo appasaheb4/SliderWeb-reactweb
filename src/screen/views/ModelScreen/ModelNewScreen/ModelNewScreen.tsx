@@ -20,8 +20,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Dialog from "react-bootstrap-dialog";
+import { ToastsContainer, ToastsStore } from "react-toasts";
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
+var io = require("socket.io-client/dist/socket.io");
 const targetDir =
   "/Users/developer/Documents/appasaheb4/project/myproject/newmode";
 var utils = require("../../../../api/constants/Utils");
@@ -64,22 +66,9 @@ export default class ModelNewScreen extends React.Component<any, any> {
     })
       .then(response => {
         let data = response.data.data;
-        if (data == "Data insert sccuess.") {
-          this.dialog.show({
-            title: "Success",
-            body: data,
-            actions: [
-              Dialog.OKAction(() => {
-                window.location.reload();
-              })
-            ],
-            bsSize: "small",
-            onHide: dialog => {
-              dialog.hide();
-              console.log("closed by clicking background.");
-            }
-          });
-        }
+        ToastsStore.success(data);
+        var socket = io();
+        socket.emit("update");
       })
       .catch(function(error) {
         console.log(error);
@@ -161,6 +150,7 @@ export default class ModelNewScreen extends React.Component<any, any> {
               this.dialog = component;
             }}
           />
+          <ToastsContainer store={ToastsStore} />
         </Container>
       </div>
     );
