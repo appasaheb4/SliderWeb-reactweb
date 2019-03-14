@@ -57,7 +57,8 @@ export default class ImagesViewScreen extends Component<any, any> {
       flag_ModelVisible: false,
       arr_SelectedImageRow: [],
       file: null,
-      imageName: ""
+      imageName: "",
+      unixDate: utils.getUnixTimeDate(new Date())
     };
 
     this.openModal = this.openModal.bind(this);
@@ -172,9 +173,10 @@ export default class ImagesViewScreen extends Component<any, any> {
     this.setState({
       flag_ModelVisible: false
     });
+    let unixStateDate = this.state.unixDate;
     const formData = new FormData();
     formData.append("myImage", this.state.file);
-    formData.append("date", utils.getUnixTimeDate(new Date()));
+    formData.append("date", unixStateDate);
     formData.append("id", this.state.arr_SelectedImageRow.id);
     formData.append("modelId", this.state.arr_SelectedImageRow.modelId);
     formData.append("modelName", this.state.arr_SelectedImageRow.modelName);
@@ -183,7 +185,7 @@ export default class ImagesViewScreen extends Component<any, any> {
     var body = {
       myImage: this.state.file,
       type: "EditImage",
-      date: utils.getUnixTimeDate(new Date()),
+      date: unixStateDate,
       modelName: this.state.arr_SelectedImageRow.modelName,
       imageName: this.state.imageName
     };
@@ -207,6 +209,9 @@ export default class ImagesViewScreen extends Component<any, any> {
         this.componentDidMount();
         var socket = io();
         socket.emit("update");
+        this.setState({
+          unixDate: utils.getUnixTimeDate(new Date())
+        });
       })
       .catch(error1 => {});
   }

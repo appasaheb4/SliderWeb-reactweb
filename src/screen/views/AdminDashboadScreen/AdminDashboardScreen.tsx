@@ -30,13 +30,13 @@ export default class AdminDashboardScreen extends Component {
 
   componentDidMount() {
     // localStorage.removeItem("sessionloginDetails");
-    let loginSeesionData = JSON.parse(
-      localStorage.getItem("sessionloginDetails")
-    );
-    if (loginSeesionData == null) {
-      this.props.history.push("/login");
-    } else {
-    }
+    // let loginSeesionData = JSON.parse(
+    //   localStorage.getItem("sessionloginDetails")
+    // );
+    // if (loginSeesionData == null) {
+    //   this.props.history.push("/login");
+    // } else {
+    // }
   }
 
   signOut(e: any) {
@@ -48,11 +48,6 @@ export default class AdminDashboardScreen extends Component {
   render() {
     return (
       <div className="app">
-        <AppHeader fixed>
-          <Suspense fallback={this.loading()}>
-            <DefaultHeader onLogout={e => this.signOut(e)} />
-          </Suspense>
-        </AppHeader>
         <div className="app-body">
           <AppSidebar fixed display="lg">
             <AppSidebarHeader />
@@ -79,7 +74,7 @@ export default class AdminDashboardScreen extends Component {
                       />
                     ) : null;
                   })}
-                  <Redirect from="/" to="/dashboard" />
+                  <Redirect from="/" to="/model/modelView" />
                 </Switch>
               </Suspense>
             </Container>
@@ -90,11 +85,6 @@ export default class AdminDashboardScreen extends Component {
             </Suspense>
           </AppAside>
         </div>
-        <AppFooter>
-          <Suspense fallback={this.loading()}>
-            <DefaultFooter />
-          </Suspense>
-        </AppFooter>
       </div>
     );
   }

@@ -31,7 +31,8 @@ export default class ImagesNewScreen extends Component<any, any> {
       data: [],
       arr_ModelName: [],
       file: null,
-      imageName: ""
+      imageName: "",
+      unixDate: utils.getUnixTimeDate(new Date())
     };
 
     this.onChange = this.onChange.bind(this);
@@ -65,18 +66,19 @@ export default class ImagesNewScreen extends Component<any, any> {
 
   onFormSubmit(e: any) {
     e.preventDefault();
+    let unixStateDate = this.state.unixDate;
     let optionValue = JSON.parse(e.target.option.value);
     console.log({ optionValue });
     const formData = new FormData();
     formData.append("myImage", this.state.file);
-    formData.append("date", utils.getUnixTimeDate(new Date()));
+    formData.append("date", unixStateDate);
     formData.append("title", e.target.title.value);
     formData.append("modelId", optionValue.id);
     formData.append("modelName", optionValue.modelName);
     formData.append("imageName", this.state.imageName);
     var body = {
       myImage: this.state.file,
-      date: utils.getUnixTimeDate(new Date()),
+      date: unixStateDate,
       modelName: optionValue.modelName,
       imageName: this.state.imageName
     };
@@ -99,6 +101,9 @@ export default class ImagesNewScreen extends Component<any, any> {
         ToastsStore.success(response.data);
         var socket = io();
         socket.emit("update");
+        this.setState({
+          unixDate: utils.getUnixTimeDate(new Date())
+        });
       })
       .catch(error1 => {});
   }
