@@ -4,8 +4,11 @@ npm-debug.log
 yarn-error.log
 .DS_Store
 
-#Environment
-/.env
+# Env
+.env
+.env.dev
+development.env
+production.env
 
 build/
 build.zip/
