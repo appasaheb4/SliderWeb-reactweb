@@ -10,7 +10,7 @@ var errorMessage = {
   internet_ErrorTitle: "No Internet",
   fAILED_INTERNET: "No internet connection available."
 };
-
+//new files
 //Colors
 var colors = {
   appColor: "#F5951D",
