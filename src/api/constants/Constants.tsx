@@ -21,22 +21,21 @@ var colors = {
   placeholder: "#5F5F5F"
 };
 
-//Rest Full Api
-const domain = "http://mobile.cmshuawei.com/";
-//const domain = "http://test.cmshuawei.com/";
+//Rest Full Api   
+const domain = process.env.REACT_APP_API_DOMIN_PROD;
 var apiary = {
   domain: domain,
-  getModels: domain + "api/getModels",
-  loginUser: domain + "api/loginUser",
-  getAllImages: domain + "api/getAllImages",
-  update_ModelData: domain + "api/update_ModelData",
-  delete_ModelData: domain + "api/delete_ModelData",
-  insertModel: domain + "api/insertModel",
-  imageUpload: domain + "api/imageUpload",
-  delete_ModelImage: domain + "api/delete_ModelImage",
-  imageUploadSessionAdd: domain + "api/imageUploadSessionAdd",
-  update_ModelImage: domain + "api/update_ModelImage",
-  imageEditUpload: domain + "api/imageEditUpload"
+  getModels: domain + process.env.REACT_APP_API_GETMODELS,
+  loginUser: domain + process.env.REACT_APP_API_LOGINUSER,
+  getAllImages: domain + process.env.REACT_APP_API_GETALLIMAGES,
+  update_ModelData: domain + process.env.REACT_APP_API_UPDATE_MODELDATA,
+  delete_ModelData: domain + process.env.REACT_APP_API_DELETE_MODELDATA,
+  insertModel: domain + process.env.REACT_APP_API_INSERTMODEL,
+  imageUpload: domain + process.env.REACT_APP_API_IMAGEUPLOAD,
+  delete_ModelImage: domain + process.env.REACT_APP_API_DELETE_MODELIMAGE,
+  imageUploadSessionAdd: domain + process.env.REACT_APP_API_IMAGEUPLOADSESSIONADD,
+  update_ModelImage: domain + process.env.REACT_APP_API_UPDATE_MODELIMAGE,
+  imageEditUpload: domain + process.env.REACT_APP_API_IMAGEEDITUPLOAD
 };
 
 export { errorMessage, apiary, colors };

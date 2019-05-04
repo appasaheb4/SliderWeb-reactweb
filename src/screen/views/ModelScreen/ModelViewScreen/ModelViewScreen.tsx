@@ -16,11 +16,11 @@ import Fab from "@material-ui/core/Fab";
 
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
-var io = require("socket.io-client/dist/socket.io");
+var io = require( "socket.io-client/dist/socket.io" );
 
 export default class ModelViewScreen extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
+  constructor ( props: any ) {
+    super( props );
 
     this.state = {
       data: [],
@@ -31,72 +31,72 @@ export default class ModelViewScreen extends Component<any, any> {
 
   componentDidMount() {
     axios
-      .get(apiary.getModels, {
+      .get( apiary.getModels, {
         headers: {
           "Access-Control-Allow-Origin": "*"
         }
-      })
-      .then(response => {
+      } )
+      .then( response => {
         let data = response.data.data;
-        this.setState({
+        this.setState( {
           data: data
-        });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        } );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
   //TODO: func connection_UpdateData
-  connection_UpdateData(oldValue, newValue, item) {
-    if (oldValue != newValue) {
-      this.updateDate(item);
+  connection_UpdateData( oldValue, newValue, item ) {
+    if ( oldValue != newValue ) {
+      this.updateDate( item );
     }
   }
 
-  updateDate(item: any) {
+  updateDate( item: any ) {
     var body = {
       id: item.id,
       modelName: item.modelName,
       price: item.price
     };
-    axios({
+    axios( {
       method: "post",
       url: apiary.update_ModelData,
       data: body
-    })
-      .then(response => {
+    } )
+      .then( response => {
         let data = response.data.data;
-        console.log({ data });
-        ToastsStore.success(data);
+        console.log( { data } );
+        ToastsStore.success( data );
         this.componentDidMount();
         var socket = io();
-        socket.emit("update");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        socket.emit( "update" );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
-  deleteData(item: any) {
+  deleteData( item: any ) {
     var body = {
       id: item.id
     };
-    axios({
+    axios( {
       method: "post",
       url: apiary.delete_ModelData,
       data: body
-    })
-      .then(response => {
+    } )
+      .then( response => {
         let data = response.data.data;
-        ToastsStore.success(data);
+        ToastsStore.success( data );
         this.componentDidMount();
         var socket = io();
-        socket.emit("update");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        socket.emit( "update" );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
   render() {
@@ -123,29 +123,29 @@ export default class ModelViewScreen extends Component<any, any> {
           width: 10
         },
         editable: false,
-        formatter: (cellContent, row) => (
+        formatter: ( cellContent, row ) => (
           <div>
             <Fab
               color="secondary"
               aria-label="delete"
-              onClick={() => {
-                this.dialog.show({
+              onClick={ () => {
+                this.dialog.show( {
                   title: "Confirmation",
                   body: "Are you sure delete data?",
                   actions: [
                     Dialog.CancelAction(),
-                    Dialog.OKAction(() => {
-                      this.deleteData(row);
-                    })
+                    Dialog.OKAction( () => {
+                      this.deleteData( row );
+                    } )
                   ],
                   bsSize: "small",
                   onHide: dialog => {
                     dialog.hide();
-                    console.log("closed by clicking background.");
+                    console.log( "closed by clicking background." );
                   }
-                });
-              }}
-              style={styles.buttonIcon}
+                } );
+              } }
+              style={ styles.buttonIcon }
             >
               <FaRegTrashAlt />
             </Fab>
@@ -160,25 +160,25 @@ export default class ModelViewScreen extends Component<any, any> {
           <BootstrapTable
             ref="table"
             keyField="id"
-            data={this.state.data}
-            columns={columns}
+            data={ this.state.data }
+            columns={ columns }
             hover
-            loading={loading}
-            pagination={paginationFactory()}
-            cellEdit={cellEditFactory({
+            loading={ loading }
+            pagination={ paginationFactory() }
+            cellEdit={ cellEditFactory( {
               mode: "click",
               blurToSave: true,
-              afterSaveCell: (oldValue, newValue, row, column) => {
-                this.connection_UpdateData(oldValue, newValue, row);
+              afterSaveCell: ( oldValue, newValue, row, column ) => {
+                this.connection_UpdateData( oldValue, newValue, row );
               }
-            })}
+            } ) }
           />
           <Dialog
-            ref={component => {
+            ref={ component => {
               this.dialog = component;
-            }}
+            } }
           />
-          <ToastsContainer store={ToastsStore} />
+          <ToastsContainer store={ ToastsStore } />
         </Container>
       </div>
     );
