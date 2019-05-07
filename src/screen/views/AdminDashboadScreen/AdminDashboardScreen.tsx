@@ -19,9 +19,9 @@ import navigation from "../../custcompontes/_nav";
 // routes config
 import routes from "../../custcompontes/routes";
 
-const DefaultAside = React.lazy(() => import("./DefaultAside"));
-const DefaultFooter = React.lazy(() => import("./DefaultFooter"));
-const DefaultHeader = React.lazy(() => import("./DefaultHeader"));
+const DefaultAside = React.lazy( () => import( "./DefaultAside" ) );
+const DefaultFooter = React.lazy( () => import( "./DefaultFooter" ) );
+const DefaultHeader = React.lazy( () => import( "./DefaultHeader" ) );
 
 export default class AdminDashboardScreen extends Component {
   loading = () => (
@@ -39,10 +39,10 @@ export default class AdminDashboardScreen extends Component {
     // }
   }
 
-  signOut(e: any) {
+  signOut( e: any ) {
     e.preventDefault();
-    localStorage.removeItem("sessionloginDetails");
-    this.props.history.push("/login");
+    localStorage.removeItem( "sessionloginDetails" );
+    this.props.history.push( "/login" );
   }
 
   render() {
@@ -53,34 +53,34 @@ export default class AdminDashboardScreen extends Component {
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-              <AppSidebarNav navConfig={navigation} {...this.props} />
+              <AppSidebarNav navConfig={ navigation } { ...this.props } />
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-            <AppBreadcrumb appRoutes={routes} />
+            <AppBreadcrumb appRoutes={ routes } />
             <Container fluid>
-              <Suspense fallback={this.loading()}>
+              <Suspense fallback={ this.loading() }>
                 <Switch>
-                  {routes.map((route, idx) => {
+                  { routes.map( ( route, idx ) => {
                     return route.component ? (
                       <Route
-                        key={idx}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => <route.component {...props} />}
+                        key={ idx }
+                        path={ route.path }
+                        exact={ route.exact }
+                        name={ route.name }
+                        render={ props => <route.component { ...props } /> }
                       />
                     ) : null;
-                  })}
+                  } ) }
                   <Redirect from="/" to="/model/modelView" />
                 </Switch>
               </Suspense>
             </Container>
           </main>
           <AppAside fixed>
-            <Suspense fallback={this.loading()}>
+            <Suspense fallback={ this.loading() }>
               <DefaultAside />
             </Suspense>
           </AppAside>

@@ -27,8 +27,8 @@ const propTypes = {
 const defaultProps = {};
 
 export default class DefaultHeader extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
+  constructor ( props: any ) {
+    super( props );
     this.state = {
       arr_UserDetails: []
     };
@@ -36,11 +36,11 @@ export default class DefaultHeader extends Component<any, any> {
 
   componentWillMount() {
     let loginSeesionData = JSON.parse(
-      localStorage.getItem("sessionloginDetails")
+      localStorage.getItem( "sessionloginDetails" )
     );
-    this.setState({
-      arr_UserDetails: loginSeesionData[0]
-    });
+    this.setState( {
+      arr_UserDetails: loginSeesionData[ 0 ]
+    } );
   }
 
   render() {
@@ -51,59 +51,59 @@ export default class DefaultHeader extends Component<any, any> {
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
-          full={{
+          full={ {
             src: logo,
             width: 40,
             height: 40,
             alt: "St Michael School"
-          }}
-          minimized={{
+          } }
+          minimized={ {
             src: sygnet,
             width: 30,
             height: 30,
             alt: "St Michael School"
-          }}
-        />{" "}
+          } }
+        />{ " " }
         <AppSidebarToggler className="d-md-down-none" display="lg" />
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink href="/"> Dashboard </NavLink>{" "}
-          </NavItem>{" "}
-        </Nav>{" "}
+            <NavLink href="/"> Dashboard </NavLink>{ " " }
+          </NavItem>{ " " }
+        </Nav>{ " " }
         <Nav className="ml-auto" navbar>
           <NavItem className="d-md-down-none">
             <NavLink href="#">
               <i className="icon-location-pin" />
-            </NavLink>{" "}
-          </NavItem>{" "}
+            </NavLink>{ " " }
+          </NavItem>{ " " }
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <h5 style={{ marginRight: 10 }}>
-                {" "}
-                {this.state.arr_UserDetails.email}{" "}
-              </h5>{" "}
-            </DropdownToggle>{" "}
+              <h5 style={ { marginRight: 10 } }>
+                { " " }
+                { this.state.arr_UserDetails.email }{ " " }
+              </h5>{ " " }
+            </DropdownToggle>{ " " }
             <DropdownMenu
               right
-              style={{
+              style={ {
                 right: "auto"
-              }}
+              } }
             >
               <DropdownItem header tag="div" className="text-center">
-                <strong> Settings </strong>{" "}
-              </DropdownItem>{" "}
+                <strong> Settings </strong>{ " " }
+              </DropdownItem>{ " " }
               <DropdownItem>
-                <i className="fa fa-user" /> Profile{" "}
-              </DropdownItem>{" "}
+                <i className="fa fa-user" /> Profile{ " " }
+              </DropdownItem>{ " " }
               <DropdownItem>
-                <i className="fa fa-wrench" /> Settings{" "}
-              </DropdownItem>{" "}
-              <DropdownItem onClick={e => this.props.onLogout(e)}>
-                <i className="fa fa-lock" /> Logout{" "}
-              </DropdownItem>{" "}
-            </DropdownMenu>{" "}
-          </AppHeaderDropdown>{" "}
-        </Nav>{" "}
+                <i className="fa fa-wrench" /> Settings{ " " }
+              </DropdownItem>{ " " }
+              <DropdownItem onClick={ e => this.props.onLogout( e ) }>
+                <i className="fa fa-lock" /> Logout{ " " }
+              </DropdownItem>{ " " }
+            </DropdownMenu>{ " " }
+          </AppHeaderDropdown>{ " " }
+        </Nav>{ " " }
       </React.Fragment>
     );
   }

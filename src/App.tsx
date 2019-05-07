@@ -10,30 +10,30 @@ const loading = () => (
 );
 
 // Containers
-const AdminDashboardScreen = Loadable({
+const AdminDashboardScreen = Loadable( {
   loader: () =>
-    import("../src/screen/views/AdminDashboadScreen/AdminDashboardScreen"),
+    import( "../src/screen/views/AdminDashboadScreen/AdminDashboardScreen" ),
   loading
-});
+} );
 
-const Login = Loadable({
-  loader: () => import("../src/screen/views/LoginScreen/LoginScreen"),
+const Login = Loadable( {
+  loader: () => import( "../src/screen/views/LoginScreen/LoginScreen" ),
   loading
-});
+} );
 
-const Error = Loadable({
-  loader: () => import("../src/screen/views/ErrorScreen/ErrorScreen"),
+const Error = Loadable( {
+  loader: () => import( "../src/screen/views/ErrorScreen/ErrorScreen" ),
   loading
-});
+} );
 
 export default class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path="/login" component={Login} exact />
-          <Route path="/" name="Home" component={AdminDashboardScreen} />
-          <Route component={Error} />
+          <Route path={ "/" } name="Home" component={ AdminDashboardScreen } />
+          <Route exact path={ "/login" } component={ Login } />
+          <Route component={ Error } />
         </Switch>
       </BrowserRouter>
     );

@@ -18,6 +18,7 @@ import Fab from "@material-ui/core/Fab";
 import { colors, apiary } from "../../../../api/constants/Constants";
 var io = require( "socket.io-client/dist/socket.io" );
 
+
 export default class ModelViewScreen extends Component<any, any> {
   constructor ( props: any ) {
     super( props );
@@ -28,6 +29,7 @@ export default class ModelViewScreen extends Component<any, any> {
       loading: true
     };
   }
+
 
   componentDidMount() {
     axios
@@ -47,12 +49,15 @@ export default class ModelViewScreen extends Component<any, any> {
       } );
   }
 
+
   //TODO: func connection_UpdateData
   connection_UpdateData( oldValue, newValue, item ) {
     if ( oldValue != newValue ) {
       this.updateDate( item );
     }
   }
+
+
 
   updateDate( item: any ) {
     var body = {

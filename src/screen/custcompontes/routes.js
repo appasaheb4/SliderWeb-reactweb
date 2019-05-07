@@ -1,18 +1,18 @@
 import React from "react";
 //import AdminDashboadScreen from "../views/AdminDashboadScreen";
-const Dashboard = React.lazy(() => import("../views/Dashboard"));
-const ImagesNewScreen = React.lazy(() =>
-  import("../views/ImagesScreen/ImagesNewScreen/ImagesNewScreen")
+const Dashboard = React.lazy( () => import( "../views/Dashboard" ) );
+const ImagesNewScreen = React.lazy( () =>
+  import( "../views/ImagesScreen/ImagesNewScreen/ImagesNewScreen" )
 );
-const ImagesViewScreen = React.lazy(() =>
-  import("../views/ImagesScreen/ImagesViewScreen/ImagesViewScreen")
+const ImagesViewScreen = React.lazy( () =>
+  import( "../views/ImagesScreen/ImagesViewScreen/ImagesViewScreen" )
 );
-const ModelViewScreen = React.lazy(() =>
-  import("../views/ModelScreen/ModelViewScreen/ModelViewScreen")
+const ModelViewScreen = React.lazy( () =>
+  import( "../views/ModelScreen/ModelViewScreen/ModelViewScreen" )
 );
 
-const ModelNewScreen = React.lazy(() =>
-  import("../views/ModelScreen/ModelNewScreen/ModelNewScreen")
+const ModelNewScreen = React.lazy( () =>
+  import( "../views/ModelScreen/ModelNewScreen/ModelNewScreen" )
 );
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [

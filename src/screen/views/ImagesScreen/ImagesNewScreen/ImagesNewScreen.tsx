@@ -20,62 +20,52 @@ import Dialog from "react-bootstrap-dialog";
 import { ToastsContainer, ToastsStore } from "react-toasts";
 //Custome File
 import { colors, apiary } from "../../../../api/constants/Constants";
-var io = require("socket.io-client/dist/socket.io");
-var utils = require("../../../../api/constants/Utils");
+var io = require( "socket.io-client/dist/socket.io" );
+var utils = require( "../../../../api/constants/Utils" );
+var ApiManager = require( "../../../../api/ApiManager/ApiManager" );
 
 export default class ImagesNewScreen extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
+  constructor ( props: any ) {
+    super( props );
 
     this.state = {
       data: [],
       arr_ModelName: [],
       file: null,
       imageName: "",
-      unixDate: utils.getUnixTimeDate(new Date())
+      unixDate: utils.getUnixTimeDate( new Date() )
     };
 
-    this.onChange = this.onChange.bind(this);
+    this.onChange = this.onChange.bind( this );
   }
 
-  componentDidMount() {
-    axios
-      .get(apiary.getModels, {
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        }
-      })
-      .then(response => {
-        let data = response.data.data;
-        console.log({ data });
-        this.setState({
-          arr_ModelName: data
-        });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+  componentDidMount = async () => {
+    let data = await ApiManager.getAllData( apiary.getModels );
+    //console.log( { data } );
+    this.setState( {
+      arr_ModelName: data
+    } );
   }
 
-  onChange(e) {
-    this.setState({
-      file: e.target.files[0],
-      imageName: e.target.files[0].name
-    });
+  onChange( e ) {
+    this.setState( {
+      file: e.target.files[ 0 ],
+      imageName: e.target.files[ 0 ].name
+    } );
   }
 
-  onFormSubmit(e: any) {
+  onFormSubmit( e: any ) {
     e.preventDefault();
     let unixStateDate = this.state.unixDate;
-    let optionValue = JSON.parse(e.target.option.value);
-    console.log({ optionValue });
+    let optionValue = JSON.parse( e.target.option.value );
+    console.log( { optionValue } );
     const formData = new FormData();
-    formData.append("myImage", this.state.file);
-    formData.append("date", unixStateDate);
-    formData.append("title", e.target.title.value);
-    formData.append("modelId", optionValue.id);
-    formData.append("modelName", optionValue.modelName);
-    formData.append("imageName", this.state.imageName);
+    formData.append( "myImage", this.state.file );
+    formData.append( "date", unixStateDate );
+    formData.append( "title", e.target.title.value );
+    formData.append( "modelId", optionValue.id );
+    formData.append( "modelName", optionValue.modelName );
+    formData.append( "imageName", this.state.imageName );
     var body = {
       myImage: this.state.file,
       date: unixStateDate,
@@ -83,12 +73,12 @@ export default class ImagesNewScreen extends Component<any, any> {
       imageName: this.state.imageName
     };
     axios
-      .post(apiary.imageUploadSessionAdd, body)
-      .then(response => {
+      .post( apiary.imageUploadSessionAdd, body )
+      .then( response => {
         let data = response.data;
-        console.log({ data });
-      })
-      .catch(error => {});
+        console.log( { data } );
+      } )
+      .catch( error => { } );
 
     const config = {
       headers: {
@@ -96,16 +86,16 @@ export default class ImagesNewScreen extends Component<any, any> {
       }
     };
     axios
-      .post(apiary.imageUpload, formData, config)
-      .then(response => {
-        ToastsStore.success(response.data);
+      .post( apiary.imageUpload, formData, config )
+      .then( response => {
+        ToastsStore.success( response.data );
         var socket = io();
-        socket.emit("update");
-        this.setState({
-          unixDate: utils.getUnixTimeDate(new Date())
-        });
-      })
-      .catch(error1 => {});
+        socket.emit( "update" );
+        this.setState( {
+          unixDate: utils.getUnixTimeDate( new Date() )
+        } );
+      } )
+      .catch( error1 => { } );
   }
 
   render() {
@@ -117,7 +107,7 @@ export default class ImagesNewScreen extends Component<any, any> {
               <div>
                 <div className="well">
                   <form
-                    onSubmit={this.onFormSubmit.bind(this)}
+                    onSubmit={ this.onFormSubmit.bind( this ) }
                     enctype="multipart/form-data"
                   >
                     <div className="form-group">
@@ -130,14 +120,14 @@ export default class ImagesNewScreen extends Component<any, any> {
                             className="form-control browser-default custom-select"
                             name="option"
                           >
-                            {this.state.arr_ModelName.map((item: any) => (
+                            { this.state.arr_ModelName.map( ( item: any ) => (
                               <option
-                                key={item.id}
-                                value={JSON.stringify(item)}
+                                key={ item.id }
+                                value={ JSON.stringify( item ) }
                               >
-                                {item.modelName}
+                                { item.modelName }
                               </option>
-                            ))}
+                            ) ) }
                           </select>
                         </Col>
                       </Row>
@@ -168,12 +158,12 @@ export default class ImagesNewScreen extends Component<any, any> {
                             type="file"
                             className="form-control"
                             name="myImage"
-                            onChange={this.onChange}
+                            onChange={ this.onChange }
                           />
                         </Col>
                       </Row>
                     </div>
-                    <div style={{ textAlign: "center" }}>
+                    <div style={ { textAlign: "center" } }>
                       <div>
                         <input
                           type="submit"
@@ -188,11 +178,11 @@ export default class ImagesNewScreen extends Component<any, any> {
             </Col>
           </Row>
           <Dialog
-            ref={component => {
+            ref={ component => {
               this.dialog = component;
-            }}
+            } }
           />
-          <ToastsContainer store={ToastsStore} />
+          <ToastsContainer store={ ToastsStore } />
         </Container>
       </div>
     );
