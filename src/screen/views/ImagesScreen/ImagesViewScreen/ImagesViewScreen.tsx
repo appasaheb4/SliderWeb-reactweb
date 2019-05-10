@@ -30,8 +30,10 @@ import { ToastsContainer, ToastsStore } from "react-toasts";
 import Fab from "@material-ui/core/Fab";
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
-var io = require("socket.io-client/dist/socket.io");
-var utils = require("../../../../api/constants/Utils");
+var io = require( "socket.io-client/dist/socket.io" );
+var utils = require( "../../../../api/constants/Utils" );
+var ApiManager = require( "../../../../api/ApiManager/ApiManager" );
+
 
 const customStyles = {
   content: {
@@ -48,9 +50,8 @@ const customStyles = {
 };
 
 export default class ImagesViewScreen extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
-
+  constructor ( props: any ) {
+    super( props );
     this.state = {
       data: [],
       loading: true,
@@ -58,129 +59,166 @@ export default class ImagesViewScreen extends Component<any, any> {
       arr_SelectedImageRow: [],
       file: null,
       imageName: "",
-      unixDate: utils.getUnixTimeDate(new Date())
+      unixDate: utils.getUnixTimeDate( new Date() )
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.openModal = this.openModal.bind( this );
+    this.closeModal = this.closeModal.bind( this );
   }
 
-  componentDidMount() {
-    axios
-      .get(apiary.getAllImages, {
-        headers: {
-          "Access-Control-Allow-Origin": "*"
+  componentWillMount = async () => {
+    var data = await ApiManager.getAllData( apiary.getAllImages );
+    data = data.data;
+    console.log( { data } );
+    let temp = [];
+    var groupBy = function ( xs, key ) {
+      return xs.reduce( function ( rv, x ) {
+        ( rv[ x[ key ] ] = rv[ x[ key ] ] || [] ).push( x );
+        return rv;
+      }, {} );
+    };
+    var groubedByTeam = groupBy( data, 'modelId' )
+    console.log( groubedByTeam );
+    let groupArryLength = Object.keys( groubedByTeam ).length;
+
+    for ( let i = 0; i < groupArryLength; i++ ) {
+      let arr_modelId = Object.keys( groubedByTeam );
+      for ( let j = 0; j < arr_modelId.length; j++ ) {
+        let data = {};
+        let id = arr_modelId[ j ];
+        let groupByArrLength = groubedByTeam[ id ].length
+        data.title = groubedByTeam[ id ][ 0 ].title
+        data.modelName = groubedByTeam[ id ][ 0 ].modelName;
+        data.createDate = groubedByTeam[ id ][ 0 ].createDate;
+        let temp1 = [];
+        for ( let k = 0; k < groupByArrLength; k++ ) {
+          let data = {};
+          data.id = groubedByTeam[ id ][ k ].id;
+          data.title = groubedByTeam[ id ][ 0 ].title
+          data.modelName = groubedByTeam[ id ][ 0 ].modelName;
+          data.imagePath = groubedByTeam[ id ][ k ].imagePath;
+          data.modelId = groubedByTeam[ id ][ k ].modelId;
+          temp1.push( data );
         }
-      })
-      .then(response => {
-        let data = response.data.data;
-        console.log({ data });
-        this.setState({
-          data: data
-        });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        data.arrDetails = temp1;
+        temp.push( data )
+      }
+      break;
+    }
+    console.log( { temp } );
+
+    this.setState( {
+      data: temp
+    } );
   }
+
+
 
   openModal() {
-    this.setState({ flag_ModelVisible: true });
+    this.setState( { flag_ModelVisible: true } );
   }
 
   closeModal() {
-    this.setState({ flag_ModelVisible: false });
+    this.setState( { flag_ModelVisible: false } );
   }
 
   //TODO: func connection_UpdateData
-  connection_UpdateData(oldValue, newValue, item) {
-    if (oldValue != newValue) {
-      this.updateDate(item);
+  connection_UpdateData( oldValue, newValue, item ) {
+    if ( oldValue != newValue ) {
+      this.updateDate( item );
     }
   }
 
-  updateDate(item: any) {
+  updateDate( item: any ) {
     var body = {
       id: item.id,
       title: item.title,
       modelId: item.modelId
     };
-    axios({
+    axios( {
       method: "post",
       url: apiary.update_ModelImage,
       data: body
-    })
-      .then(response => {
+    } )
+      .then( response => {
         let data = response.data.data;
-        ToastsStore.success(data);
+        ToastsStore.success( data );
         this.componentDidMount();
         var socket = io();
-        socket.emit("update");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        socket.emit( "update" );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
-  deleteData(item: any) {
+  deleteData( item: any ) {
     var body = {
       id: item.id
     };
-    axios({
+    axios( {
       method: "post",
       url: apiary.delete_ModelImage,
       data: body
-    })
-      .then(response => {
+    } )
+      .then( response => {
         let data = response.data.data;
-        ToastsStore.success(data);
+        ToastsStore.success( data );
         this.componentDidMount();
         var socket = io();
-        socket.emit("update");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        socket.emit( "update" );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
-  priceFormatter(cell, row) {
-    let imagePage = apiary.domain + row.imagePath;
-    return (
-      <img
-        onClick={() => {
-          console.log({ row });
-          this.setState({
+  priceFormatter( cell, row ) {
+    let arrDetails = row.arrDetails;
+    const imageGroups = arrDetails.map( ( item: any ) => (
+      < img
+        onClick={ () => {
+          this.setState( {
             flag_ModelVisible: true,
-            arr_SelectedImageRow: row
-          });
-        }}
-        src={imagePage}
+            arr_SelectedImageRow: item
+          } );
+        }
+        }
+        src={ apiary.domain + item.imagePath }
         className="img-rounded img-responsive img-thumbnail"
-        style={{ width: 200, height: 100 }}
+        style={ { width: 200, height: 100 }
+        }
       />
+    ) );
+    return (
+      <div>
+        { imageGroups }
+      </div>
     );
+
+
   }
 
-  onChange(e) {
-    this.setState({
-      file: e.target.files[0],
-      imageName: e.target.files[0].name
-    });
+  onChange( e ) {
+    this.setState( {
+      file: e.target.files[ 0 ],
+      imageName: e.target.files[ 0 ].name
+    } );
   }
 
-  onFormSubmit(e: any) {
+  onFormSubmit( e: any ) {
     e.preventDefault();
-    this.setState({
+    this.setState( {
       flag_ModelVisible: false
-    });
+    } );
     let unixStateDate = this.state.unixDate;
     const formData = new FormData();
-    formData.append("myImage", this.state.file);
-    formData.append("date", unixStateDate);
-    formData.append("id", this.state.arr_SelectedImageRow.id);
-    formData.append("modelId", this.state.arr_SelectedImageRow.modelId);
-    formData.append("modelName", this.state.arr_SelectedImageRow.modelName);
-    formData.append("imageName", this.state.imageName);
+    formData.append( "myImage", this.state.file );
+    formData.append( "date", unixStateDate );
+    formData.append( "id", this.state.arr_SelectedImageRow.id );
+    formData.append( "modelId", this.state.arr_SelectedImageRow.modelId );
+    formData.append( "modelName", this.state.arr_SelectedImageRow.modelName );
+    formData.append( "imageName", this.state.imageName );
 
     var body = {
       myImage: this.state.file,
@@ -190,12 +228,12 @@ export default class ImagesViewScreen extends Component<any, any> {
       imageName: this.state.imageName
     };
     axios
-      .post(apiary.imageUploadSessionAdd, body)
-      .then(response => {
+      .post( apiary.imageUploadSessionAdd, body )
+      .then( response => {
         let data = response.data;
-        console.log({ data });
-      })
-      .catch(error => {});
+        console.log( { data } );
+      } )
+      .catch( error => { } );
 
     const config = {
       headers: {
@@ -203,17 +241,17 @@ export default class ImagesViewScreen extends Component<any, any> {
       }
     };
     axios
-      .post(apiary.imageEditUpload, formData, config)
-      .then(response => {
-        ToastsStore.success(response.data);
+      .post( apiary.imageEditUpload, formData, config )
+      .then( response => {
+        ToastsStore.success( response.data );
         this.componentDidMount();
         var socket = io();
-        socket.emit("update");
-        this.setState({
-          unixDate: utils.getUnixTimeDate(new Date())
-        });
-      })
-      .catch(error1 => {});
+        socket.emit( "update" );
+        this.setState( {
+          unixDate: utils.getUnixTimeDate( new Date() )
+        } );
+      } )
+      .catch( error1 => { } );
   }
 
   render() {
@@ -235,7 +273,7 @@ export default class ImagesViewScreen extends Component<any, any> {
       {
         dataField: "imagePath",
         text: "Image",
-        formatter: this.priceFormatter.bind(this),
+        formatter: this.priceFormatter.bind( this ),
         editable: false
       },
       {
@@ -245,29 +283,29 @@ export default class ImagesViewScreen extends Component<any, any> {
           width: 10
         },
         editable: false,
-        formatter: (cellContent, row) => (
+        formatter: ( cellContent, row ) => (
           <div>
             <Fab
               color="secondary"
               aria-label="delete"
-              onClick={() => {
-                this.dialog.show({
+              onClick={ () => {
+                this.dialog.show( {
                   title: "Confirmation",
                   body: "Are you sure delete data?",
                   actions: [
                     Dialog.CancelAction(),
-                    Dialog.OKAction(() => {
-                      this.deleteData(row);
-                    })
+                    Dialog.OKAction( () => {
+                      this.deleteData( row );
+                    } )
                   ],
                   bsSize: "small",
                   onHide: dialog => {
                     dialog.hide();
-                    console.log("closed by clicking background.");
+                    console.log( "closed by clicking background." );
                   }
-                });
-              }}
-              style={styles.buttonIcon}
+                } );
+              } }
+              style={ styles.buttonIcon }
             >
               <FaRegTrashAlt />
             </Fab>
@@ -280,34 +318,34 @@ export default class ImagesViewScreen extends Component<any, any> {
         <Container>
           <BootstrapTable
             keyField="id"
-            data={this.state.data}
-            columns={columns}
+            data={ this.state.data }
+            columns={ columns }
             hover
-            pagination={paginationFactory()}
-            cellEdit={cellEditFactory({
+            pagination={ paginationFactory() }
+            cellEdit={ cellEditFactory( {
               mode: "click",
               blurToSave: true,
-              afterSaveCell: (oldValue, newValue, row, column) => {
-                this.connection_UpdateData(oldValue, newValue, row);
+              afterSaveCell: ( oldValue, newValue, row, column ) => {
+                this.connection_UpdateData( oldValue, newValue, row );
               }
-            })}
+            } ) }
           />
           <Dialog
-            ref={component => {
+            ref={ component => {
               this.dialog = component;
-            }}
+            } }
           />
 
           <Modal
-            isOpen={this.state.flag_ModelVisible}
-            onRequestClose={this.closeModal}
-            style={customStyles}
+            isOpen={ this.state.flag_ModelVisible }
+            onRequestClose={ this.closeModal }
+            style={ customStyles }
             contentLabel="Example Modal"
           >
-            <h4 style={{ textAlign: "center" }}>Upload Image</h4>
+            <h4 style={ { textAlign: "center" } }>Upload Image</h4>
             <div className="form-group">
               <form
-                onSubmit={this.onFormSubmit.bind(this)}
+                onSubmit={ this.onFormSubmit.bind( this ) }
                 enctype="multipart/form-data"
               >
                 <Row>
@@ -315,18 +353,18 @@ export default class ImagesViewScreen extends Component<any, any> {
                     <span>Title :</span>
                   </Col>
                   <Col md="9">
-                    <span>{this.state.arr_SelectedImageRow.title}</span>
+                    <span>{ this.state.arr_SelectedImageRow.title }</span>
                   </Col>
                 </Row>
-                <Row style={{ marginTop: 10 }}>
+                <Row style={ { marginTop: 10 } }>
                   <Col md="3">
                     <span>Model :</span>
                   </Col>
                   <Col md="9">
-                    <span>{this.state.arr_SelectedImageRow.modelName}</span>
+                    <span>{ this.state.arr_SelectedImageRow.modelName }</span>
                   </Col>
                 </Row>
-                <Row style={{ marginTop: 10 }}>
+                <Row style={ { marginTop: 10 } }>
                   <Col md="3">
                     <span>Image :</span>
                   </Col>
@@ -335,14 +373,14 @@ export default class ImagesViewScreen extends Component<any, any> {
                       type="file"
                       className="form-control"
                       name="myImage"
-                      onChange={this.onChange.bind(this)}
+                      onChange={ this.onChange.bind( this ) }
                     />
                   </Col>
                 </Row>
-                <Row style={{ marginTop: 20, textAlign: "center" }}>
+                <Row style={ { marginTop: 20, textAlign: "center" } }>
                   <Col>
                     <input
-                      style={{ width: "100%" }}
+                      style={ { width: "100%" } }
                       type="submit"
                       className="btn btn-primary"
                       value="Upload"
@@ -352,7 +390,7 @@ export default class ImagesViewScreen extends Component<any, any> {
               </form>
             </div>
           </Modal>
-          <ToastsContainer store={ToastsStore} />
+          <ToastsContainer store={ ToastsStore } />
         </Container>
       </div>
     );

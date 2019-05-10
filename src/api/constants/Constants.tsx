@@ -10,7 +10,8 @@ var errorMessage = {
   internet_ErrorTitle: "No Internet",
   fAILED_INTERNET: "No internet connection available."
 };
-//new files
+
+//new files   
 //Colors
 var colors = {
   appColor: "#F5951D",
@@ -21,12 +22,11 @@ var colors = {
   placeholder: "#5F5F5F"
 };
 
-//Rest Full Api   
+//Rest Full Api         
 const domain = process.env.REACT_APP_API_DOMIN_PROD;
 var apiary = {
   domain: domain,
   getModels: domain + process.env.REACT_APP_API_GETMODELS,
-  loginUser: domain + process.env.REACT_APP_API_LOGINUSER,
   getAllImages: domain + process.env.REACT_APP_API_GETALLIMAGES,
   update_ModelData: domain + process.env.REACT_APP_API_UPDATE_MODELDATA,
   delete_ModelData: domain + process.env.REACT_APP_API_DELETE_MODELDATA,
@@ -37,5 +37,7 @@ var apiary = {
   update_ModelImage: domain + process.env.REACT_APP_API_UPDATE_MODELIMAGE,
   imageEditUpload: domain + process.env.REACT_APP_API_IMAGEEDITUPLOAD
 };
+
+
 
 export { errorMessage, apiary, colors };

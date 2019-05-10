@@ -20,6 +20,7 @@ import Dialog from "react-bootstrap-dialog";
 import { ToastsContainer, ToastsStore } from "react-toasts";
 //Custome File
 import { colors, apiary } from "../../../../api/constants/Constants";
+import renderIf from "../../../../api/constants/validation/renderIf";
 var io = require( "socket.io-client/dist/socket.io" );
 var utils = require( "../../../../api/constants/Utils" );
 var ApiManager = require( "../../../../api/ApiManager/ApiManager" );
@@ -41,9 +42,9 @@ export default class ImagesNewScreen extends Component<any, any> {
 
   componentDidMount = async () => {
     let data = await ApiManager.getAllData( apiary.getModels );
-    //console.log( { data } );
+    // console.log( { data } );
     this.setState( {
-      arr_ModelName: data
+      arr_ModelName: data.data
     } );
   }
 
@@ -55,50 +56,66 @@ export default class ImagesNewScreen extends Component<any, any> {
   }
 
   onFormSubmit( e: any ) {
-    e.preventDefault();
-    let unixStateDate = this.state.unixDate;
-    let optionValue = JSON.parse( e.target.option.value );
-    console.log( { optionValue } );
-    const formData = new FormData();
-    formData.append( "myImage", this.state.file );
-    formData.append( "date", unixStateDate );
-    formData.append( "title", e.target.title.value );
-    formData.append( "modelId", optionValue.id );
-    formData.append( "modelName", optionValue.modelName );
-    formData.append( "imageName", this.state.imageName );
-    var body = {
-      myImage: this.state.file,
-      date: unixStateDate,
-      modelName: optionValue.modelName,
-      imageName: this.state.imageName
-    };
-    axios
-      .post( apiary.imageUploadSessionAdd, body )
-      .then( response => {
-        let data = response.data;
-        console.log( { data } );
-      } )
-      .catch( error => { } );
+    try {
+      e.preventDefault();
+      let unixStateDate = this.state.unixDate;
+      let optionValue = JSON.parse( e.target.option.value );
+      console.log( { optionValue } );
+      const formData = new FormData();
+      formData.append( "myImage", this.state.file );
+      formData.append( "date", unixStateDate );
+      formData.append( "title", e.target.title.value );
+      formData.append( "modelId", optionValue.id );
+      formData.append( "modelName", optionValue.modelName );
+      formData.append( "imageName", this.state.imageName );
+      var body = {
+        myImage: this.state.file,
+        date: unixStateDate,
+        modelName: optionValue.modelName,
+        imageName: this.state.imageName
+      };
+      axios
+        .post( apiary.imageUploadSessionAdd, body )
+        .then( response => {
+          let data = response.data;
+          console.log( { data } );
+        } )
+        .catch( error => { } );
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data"
-      }
-    };
-    axios
-      .post( apiary.imageUpload, formData, config )
-      .then( response => {
-        ToastsStore.success( response.data );
-        var socket = io();
-        socket.emit( "update" );
-        this.setState( {
-          unixDate: utils.getUnixTimeDate( new Date() )
-        } );
-      } )
-      .catch( error1 => { } );
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      };
+      axios
+        .post( apiary.imageUpload, formData, config )
+        .then( response => {
+          ToastsStore.success( response.data );
+          var socket = io();
+          socket.emit( "update" );
+          this.setState( {
+            unixDate: utils.getUnixTimeDate( new Date() )
+          } );
+
+        } )
+        .catch( error1 => { } );
+    } catch ( error ) {
+      console.log( { error } );
+
+    }
   }
 
+
+
   render() {
+    const modelList = this.state.arr_ModelName.map( ( item: any ) => (
+      <option
+        key={ item.id }
+        value={ JSON.stringify( item ) }
+      >
+        { item.modelName }
+      </option>
+    ) );
     return (
       <div className="app flex-row">
         <Container>
@@ -120,15 +137,9 @@ export default class ImagesNewScreen extends Component<any, any> {
                             className="form-control browser-default custom-select"
                             name="option"
                           >
-                            { this.state.arr_ModelName.map( ( item: any ) => (
-                              <option
-                                key={ item.id }
-                                value={ JSON.stringify( item ) }
-                              >
-                                { item.modelName }
-                              </option>
-                            ) ) }
+                            { modelList }
                           </select>
+
                         </Col>
                       </Row>
                     </div>
