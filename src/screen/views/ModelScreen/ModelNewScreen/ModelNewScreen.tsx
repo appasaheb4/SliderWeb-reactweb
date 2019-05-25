@@ -23,32 +23,32 @@ import Dialog from "react-bootstrap-dialog";
 import { ToastsContainer, ToastsStore } from "react-toasts";
 //Custome Files
 import { colors, apiary } from "../../../../api/constants/Constants";
-var io = require("socket.io-client/dist/socket.io");
+var io = require( "socket.io-client/dist/socket.io" );
 const targetDir =
   "/Users/developer/Documents/appasaheb4/project/myproject/newmode";
-var utils = require("../../../../api/constants/Utils");
+var utils = require( "../../../../api/constants/Utils" );
 
 export default class ModelNewScreen extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
+  constructor ( props: any ) {
+    super( props );
     this.state = {
       data: [],
       startDate: new Date(),
-      hexDate: utils.getUnixTimeDate(new Date())
+      hexDate: utils.getUnixTimeDate( new Date() )
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind( this );
+    this.handleSubmit = this.handleSubmit.bind( this );
   }
 
-  handleChange(date: any) {
-    let hexDate = utils.getUnixTimeDate(date.toString());
-    this.setState({
+  handleChange( date: any ) {
+    let hexDate = utils.getUnixTimeDate( date.toString() );
+    this.setState( {
       hexDate: hexDate,
       startDate: date
-    });
+    } );
   }
 
-  handleSubmit(e: any) {
+  handleSubmit( e: any ) {
     e.preventDefault();
     let hexDate = this.state.hexDate;
     let modelName = e.target.modelName.value;
@@ -59,20 +59,20 @@ export default class ModelNewScreen extends React.Component<any, any> {
       modelName: modelName,
       price: price
     };
-    axios({
+    axios( {
       method: "post",
       url: apiary.insertModel,
       data: body
-    })
-      .then(response => {
+    } )
+      .then( response => {
         let data = response.data.data;
-        ToastsStore.success(data);
+        ToastsStore.success( data );
         var socket = io();
-        socket.emit("update");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+        socket.emit( "update" );
+      } )
+      .catch( function ( error ) {
+        console.log( error );
+      } );
   }
 
   render() {
@@ -83,7 +83,7 @@ export default class ModelNewScreen extends React.Component<any, any> {
             <Col md="4">
               <div>
                 <div className="well">
-                  <form onSubmit={this.handleSubmit.bind(this)}>
+                  <form onSubmit={ this.handleSubmit.bind( this ) }>
                     <div className="form-group">
                       <Row>
                         <Col md="2">
@@ -92,9 +92,9 @@ export default class ModelNewScreen extends React.Component<any, any> {
                         <Col md="10">
                           <DatePicker
                             className="form-control"
-                            selected={this.state.startDate}
-                            onChange={this.handleChange}
-                            style={{ margionTop: 100 }}
+                            selected={ this.state.startDate }
+                            onChange={ this.handleChange }
+                            style={ { margionTop: 100 } }
                           />
                         </Col>
                       </Row>
@@ -131,7 +131,7 @@ export default class ModelNewScreen extends React.Component<any, any> {
                     </div>
 
                     <div className="form-group" />
-                    <div style={{ textAlign: "center" }}>
+                    <div style={ { textAlign: "center" } }>
                       <div>
                         <input
                           type="submit"
@@ -146,11 +146,11 @@ export default class ModelNewScreen extends React.Component<any, any> {
             </Col>
           </Row>
           <Dialog
-            ref={component => {
+            ref={ component => {
               this.dialog = component;
-            }}
+            } }
           />
-          <ToastsContainer store={ToastsStore} />
+          <ToastsContainer store={ ToastsStore } />
         </Container>
       </div>
     );
