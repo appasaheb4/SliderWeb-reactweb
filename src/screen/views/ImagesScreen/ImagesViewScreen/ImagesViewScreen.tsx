@@ -174,7 +174,9 @@ export default class ImagesViewScreen extends Component<any, any> {
   }
 
   priceFormatter( cell, row ) {
-    let arrDetails = row.arrDetails;
+    console.log( { cell, row } );
+    var arrDetails = row.arrDetails;
+    console.log( { arrDetails } );
     const imageGroups = arrDetails.map( ( item: any ) => (
       < img
         onClick={ () => {
@@ -255,6 +257,7 @@ export default class ImagesViewScreen extends Component<any, any> {
   }
 
   render() {
+    let data = this.state.data;
     const columns = [
       {
         dataField: "id",
@@ -318,7 +321,7 @@ export default class ImagesViewScreen extends Component<any, any> {
         <Container>
           <BootstrapTable
             keyField="id"
-            data={ this.state.data }
+            data={ data }
             columns={ columns }
             hover
             pagination={ paginationFactory() }
