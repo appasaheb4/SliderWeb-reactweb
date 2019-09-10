@@ -22,7 +22,7 @@ var colors = {
   placeholder: "#5F5F5F"
 };
 
-//Rest Full Api              
+//Rest Full Api                                 
 const domain = process.env.REACT_APP_API_DOMIN_PROD_IZMIR_CMSHUAWEI;
 var apiary = {
   domain: domain,
@@ -37,7 +37,5 @@ var apiary = {
   update_ModelImage: domain + process.env.REACT_APP_API_UPDATE_MODELIMAGE,
   imageEditUpload: domain + process.env.REACT_APP_API_IMAGEEDITUPLOAD
 };
-
-
 
 export { errorMessage, apiary, colors };

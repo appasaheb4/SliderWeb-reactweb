@@ -10,8 +10,5 @@ yarn-error.log
 development.env
 production.env
 
-# NodeJs
-src/api/NodeJs
-
 build/
 build.zip/

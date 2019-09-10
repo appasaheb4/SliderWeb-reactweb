@@ -57,12 +57,11 @@ export default class ModelViewScreen extends Component<any, any> {
     }
   }
 
-
-
   updateDate( item: any ) {
     var body = {
       id: item.id,
       modelName: item.modelName,
+      autoprice: item.autoprice,
       price: item.price
     };
     axios( {
@@ -116,6 +115,10 @@ export default class ModelViewScreen extends Component<any, any> {
       {
         dataField: "modelName",
         text: "Model Name"
+      },
+      {
+        dataField: "autoprice",
+        text: "Auto Price"
       },
       {
         dataField: "price",

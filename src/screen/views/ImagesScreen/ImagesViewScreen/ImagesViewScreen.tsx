@@ -315,7 +315,7 @@ export default class ImagesViewScreen extends Component<any, any> {
           </div>
         )
       }
-    ];
+    ];  
     return (
       <div className="app flex-row">
         <Container>
@@ -324,7 +324,7 @@ export default class ImagesViewScreen extends Component<any, any> {
             data={ data }
             columns={ columns }
             hover
-            pagination={ paginationFactory() }
+            // pagination={ paginationFactory() }
             cellEdit={ cellEditFactory( {
               mode: "click",
               blurToSave: true,
