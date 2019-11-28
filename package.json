@@ -1,8 +1,8 @@
 {
   "name": "panelimweb",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "http://istinye.cmshuawei.com",
+  "homepage": "https://istinye.cmshuawei.com",
+  "private": false,
   "dependencies": {
     "@coreui/coreui": "^2.1.5",
     "@coreui/coreui-plugin-chartjs-custom-tooltips": "^1.2.0",
